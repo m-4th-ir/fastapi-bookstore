@@ -1,7 +1,7 @@
 [project]
-name = "fastapi-bookstore-backend"
+name = "fastapi-bookstore"
 version = "0.1.0"
-description = "FastAPI demo bookstore backend with in-memory data store"
+description = "Demo FastAPI bookstore backend with in-memory store"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
