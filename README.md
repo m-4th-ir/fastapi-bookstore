@@ -1,20 +1,26 @@
-# FastAPI Bookstore Backend
+# FastAPI Bookstore
 
-Demo FastAPI bookstore backend with in-memory data store.
+Demo FastAPI backend for a simple bookstore, using an in-memory store.
 
-## Features
-
-- Authors CRUD
-- Books CRUD
-- Search books by title/description, category, and author
-- In-memory data store (no external database)
+## Tech Stack
+- FastAPI
+- Pydantic v2
+- Uvicorn
 
 ## Running Locally
 
 ```bash
-cd backend
 uv sync
 uv run uvicorn app.main:app --reload
 ```
 
-Then open http://localhost:8000/docs for the interactive API docs.
+Base URL: `http://localhost:8000`
+
+## API Overview
+
+- `GET /health` - health check
+- `GET /api/v1/books/` - list all books
+- `GET /api/v1/books/{book_id}` - get a single book
+- `POST /api/v1/books/` - create a book
+- `PUT /api/v1/books/{book_id}` - update a book
+- `DELETE /api/v1/books/{book_id}` - delete a book

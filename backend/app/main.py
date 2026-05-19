@@ -1,7 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import books, authors
+from app.routers import books
 
 app = FastAPI(title="FastAPI Bookstore", version="0.1.0")
 
@@ -13,11 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(books.router, prefix="/api/v1")
+
 
 @app.get("/health")
-async def health() -> dict:
+async def health():
     return {"status": "ok"}
-
-
-app.include_router(books.router, prefix="/api/v1")
-app.include_router(authors.router, prefix="/api/v1")

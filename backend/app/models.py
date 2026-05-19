@@ -1,44 +1,27 @@
-from datetime import date, datetime
+from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, field_validator
-
-
-class AuthorBase(BaseModel):
-    name: str = Field(..., min_length=1)
-    bio: Optional[str] = None
-
-
-class AuthorCreate(AuthorBase):
-    pass
-
-
-class AuthorUpdate(BaseModel):
-    name: Optional[str] = Field(None, min_length=1)
-    bio: Optional[str] = None
-
-
-class AuthorOut(AuthorBase):
-    id: str
-    created_at: datetime
-    updated_at: Optional[datetime] = None
+from pydantic import BaseModel, field_validator
 
 
 class BookBase(BaseModel):
-    title: str = Field(..., min_length=1)
-    description: Optional[str] = None
-    price: float = Field(..., gt=0)
-    isbn: str = Field(..., min_length=10, max_length=17)
-    published_date: Optional[date] = None
-    stock: int = Field(..., ge=0)
-    category: Optional[str] = None
-    author_id: str
+    title: str
+    author: str
+    price: float
+    in_stock: int
 
-    @field_validator("title")
+    @field_validator("price")
     @classmethod
-    def title_not_blank(cls, v: str) -> str:
-        if not v.strip():
-            raise ValueError("title must not be blank")
+    def validate_price(cls, v: float) -> float:
+        if v < 0:
+            raise ValueError("price must be non-negative")
+        return v
+
+    @field_validator("in_stock")
+    @classmethod
+    def validate_in_stock(cls, v: int) -> int:
+        if v < 0:
+            raise ValueError("in_stock must be non-negative")
         return v
 
 
@@ -47,23 +30,16 @@ class BookCreate(BookBase):
 
 
 class BookUpdate(BaseModel):
-    title: Optional[str] = Field(None, min_length=1)
-    description: Optional[str] = None
-    price: Optional[float] = Field(None, gt=0)
-    isbn: Optional[str] = Field(None, min_length=10, max_length=17)
-    published_date: Optional[date] = None
-    stock: Optional[int] = Field(None, ge=0)
-    category: Optional[str] = None
-    author_id: Optional[str] = None
+    title: Optional[str] = None
+    author: Optional[str] = None
+    price: Optional[float] = None
+    in_stock: Optional[int] = None
 
 
-class BookOut(BookBase):
+class Book(BookBase):
     id: str
     created_at: datetime
     updated_at: Optional[datetime] = None
 
-
-class ErrorResponse(BaseModel):
-    error: str
-    message: str
-    detail: Optional[object] = None
+    class Config:
+        from_attributes = True
